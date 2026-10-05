@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dramatic Slacker - 全自動・悲劇の主人公化プラットフォーム</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- パーティクル背景 -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- スキャンライン -->
+<div class="scanlines"></div>
+
+<!-- ヘッダー -->
+<header class="app-header">
+  <div class="header-left">
+    <div class="header-logo">🎭</div>
+    <div>
+      <div class="header-title">Dramatic Slacker</div>
+      <div class="header-subtitle">全自動・悲劇の主人公化＆責任転嫁プラットフォーム v1.0.0</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-badge">
+      <div class="status-dot"></div>
+      SYSTEM ONLINE
+    </div>
+    <div class="doc-number">DOC-2024-LOL-001</div>
+  </div>
+</header>
+
+<!-- メインコンテナ -->
+<main class="main-container">
+
+  <!-- セクション1: 入力フォーム -->
+  <section class="section-card">
+    <div class="section-header">
+      <div class="section-icon">⚡</div>
+      <div>
+        <div class="section-title">【F-01】過失のエピック・トランスフォーム</div>
+        <div class="section-desc">あなたの卑近な過失を崇高なる物語へと昇華させます</div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <!-- 過失の種類 -->
+      <div class="form-group">
+        <label class="form-label">
+          <span class="label-icon">💀</span>
+          過失の種類（事実の選択）
+        </label>
+        <select class="form-select" id="guiltType">
+          <option value="nidone">二度寝（目覚ましを止めた記憶がない）</option>
+          <option value="game">ゲームのやりすぎ（気づいたら夜明け）</option>
+          <option value="yarukinai">単に行く気が失せた</option>
+          <option value="sns">SNSのリール地獄から抜け出せなかった</option>
+          <option value="netflix">Netflixの「次のエピソード」を止められなかった</option>
+          <option value="manga">漫画の新刊を一気読みした</option>
+          <option value="nap">「5分だけ」の昼寝が3時間に</option>
+          <option value="cat">猫がキーボードの上で寝ている</option>
+          <option value="deadline">締切を把握していなかった（そもそも）</option>
+        </select>
+      </div>
+
+      <!-- 演出ジャンル -->
+      <div class="form-group">
+        <label class="form-label">
+          <span class="label-icon">🎬</span>
+          演出ジャンル
+        </label>
+        <div class="genre-grid">
+          <div class="genre-card active" data-genre="sf" onclick="selectGenre(this)">
+            <div class="genre-icon">🚀</div>
+            <div class="genre-name">ハリウッドSF</div>
+          </div>
+          <div class="genre-card" data-genre="history" onclick="selectGenre(this)">
+            <div class="genre-icon">⚔️</div>
+            <div class="genre-name">重厚な歴史スペクタクル</div>
+          </div>
+          <div class="genre-card" data-genre="love" onclick="selectGenre(this)">
+            <div class="genre-icon">💔</div>
+            <div class="genre-name">純愛・難病モノ</div>
+          </div>
+          <div class="genre-card" data-genre="nordic" onclick="selectGenre(this)">
+            <div class="genre-icon">🌧️</div>
+            <div class="genre-name">北欧サスペンス</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 遅延時間スライダー -->
+    <div class="form-group" style="margin-top:20px;">
+      <label class="form-label">
+        <span class="label-icon">⏱️</span>
+        遅刻 / 納期遅延の推定時間：<span id="delayLabel" style="color:var(--neon-cyan);font-weight:700;">30分</span>
+      </label>
+      <input type="range" class="delay-slider" id="delaySlider"
+        min="0" max="100" value="15"
+        oninput="updateDelay(this.value)">
+      <div class="slider-labels">
+        <span>10分</span>
+        <span>1時間</span>
+        <span>半日</span>
+        <span>1週間</span>
+        <span>1ヶ月</span>
+        <span>3ヶ月</span>
+      </div>
+    </div>
+
+    <!-- 生成ボタン -->
+    <button class="generate-btn" id="generateBtn" onclick="generateExcuse()">
+      <span>🎭</span>
+      <span>言い訳を生成する</span>
+      <span style="font-size:11px;opacity:0.7;margin-left:auto;">〜3秒以内に完了〜</span>
+    </button>
+  </section>
+
+  <!-- セクション2: 上司の怒りゲージ -->
+  <section class="section-card">
+    <div class="section-header">
+      <div class="section-icon">😤</div>
+      <div>
+        <div class="section-title">【F-02】上司の怒りゲージ推定</div>
+        <div class="section-desc">送信前に許容確率をリアルタイム算出します</div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="form-group">
+        <label class="form-label">
+          <span class="label-icon">👔</span>
+          送信相手の役職
+        </label>
+        <select class="form-select" id="bossRank">
+          <option value="1">係長（比較的温情あり）</option>
+          <option value="2" selected>課長（標準的な怒り）</option>
+          <option value="3">部長（怒りの化身）</option>
+          <option value="4">取締役（もはや神）</option>
+          <option value="5">社長（詰め腹覚悟）</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <span class="label-icon">🌡️</span>
+          直近の機嫌
+        </label>
+        <div style="display:flex;gap:10px;">
+          <button class="mood-btn active" data-mood="good" onclick="selectMood(this)">😊 良好</button>
+          <button class="mood-btn" data-mood="normal" onclick="selectMood(this)">😐 普通</button>
+          <button class="mood-btn" data-mood="bad" onclick="selectMood(this)">😡 最悪</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <span class="label-icon">🩸</span>
+          血液型
+        </label>
+        <select class="form-select" id="bloodType">
+          <option value="A">A型（完璧主義・怒りは静かで深い）</option>
+          <option value="B">B型（気分屋・今日の運次第）</option>
+          <option value="O" selected>O型（大らか・でも爆発は突然）</option>
+          <option value="AB">AB型（判断不能・理論派）</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" style="margin-bottom:12px;">
+          <span class="label-icon">📊</span>
+          許容確率
+        </label>
+        <div class="anger-gauge-container">
+          <div class="anger-gauge-bar" id="angerGaugeBar"></div>
+        </div>
+        <div class="anger-percentage" id="angerPercentage">---%</div>
+        <div class="anger-message" id="angerMessage">上記の情報を入力してください</div>
+      </div>
+    </div>
+
+    <button class="generate-btn" style="background:linear-gradient(135deg,#ff6b35,#f7c59f);margin-top:10px;" onclick="calculateAnger()">
+      <span>📊</span>
+      <span>怒りゲージを算出する</span>
+    </button>
+  </section>
+
+  <!-- セクション3: 生成結果出力 -->
+  <section class="section-card" id="outputSection" style="display:none;">
+    <div class="section-header">
+      <div class="section-icon">📜</div>
+      <div>
+        <div class="section-title">生成された言い訳テキスト</div>
+        <div class="section-desc">以下をそのままSlack/メールに貼り付けてください</div>
+      </div>
+    </div>
+
+    <div class="output-box" id="outputBox">
+      <!-- 生成テキストがここに入る -->
+    </div>
+
+    <!-- BGMビジュアライザー -->
+    <div class="bgm-visualizer" id="bgmVisualizer">
+      <!-- JSで動的生成 -->
+    </div>
+
+    <div class="output-actions">
+      <button class="action-btn copy" id="copyBtn" onclick="copyExcuse()">
+        <span>📋</span> テキストをコピー
+      </button>
+      <button class="action-btn bgm" id="bgmBtn" onclick="toggleBGM()">
+        <span>🎵</span> BGM朗読モード
+      </button>
+      <button class="action-btn nft">
+        <span>🔗</span> NFT言い訳を発行（Proof of Excuse）
+      </button>
+    </div>
+
+    <!-- セーフティネット -->
+    <div class="safety-net" id="safetyNet" style="display:none;">
+      <div style="font-size:24px;margin-bottom:8px;">🐱⚠️</div>
+      <div style="font-weight:700;font-size:16px;margin-bottom:6px;">セーフティネット発動！</div>
+      <div style="font-size:13px;opacity:0.85;">許容確率が10%を下回ったため、「猫がキーボードの上で寝ていて物理的に動かせない」証拠写真の添付を推奨します。AIが今すぐ生成中…</div>
+      <div style="font-size:40px;margin-top:14px;letter-spacing:8px;">🐈 💤 ⌨️</div>
+    </div>
+  </section>
+
+  <!-- セクション4: KPIダッシュボード -->
+  <section class="section-card">
+    <div class="section-header">
+      <div class="section-icon">📈</div>
+      <div>
+        <div class="section-title">プロジェクト成功基準（KPI）ダッシュボード</div>
+        <div class="section-desc">リアルタイムモニタリング ※数値はすべてフィクションです</div>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value" id="kpi1">0%</div>
+        <div class="kpi-label">言い訳採用率（目標95%）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="kpi2" style="color:var(--neon-cyan);">0%</div>
+        <div class="kpi-label">懲戒免職率（目標0.0%）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="kpi3">0</div>
+        <div class="kpi-label">上司の「フッ…ｗ」獲得数</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value" id="kpi4">0</div>
+        <div class="kpi-label">NFT言い訳発行総数</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- セクション5: パニックボタン -->
+  <section class="section-card" style="text-align:center;">
+    <div class="section-header" style="justify-content:center;">
+      <div class="section-icon">💣</div>
+      <div>
+        <div class="section-title">【F-04】パニック・ボタン（緊急自己爆破）</div>
+        <div class="section-desc">すべての言い訳が通用しないと判断された瞬間のみ使用</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:16px;background:rgba(255,0,0,0.05);border:1px dashed rgba(255,0,0,0.3);border-radius:12px;font-size:12px;color:#ff6666;margin-bottom:24px;">
+      ⚠️ 警告：このボタンの使用は、ユーザーの社会性クラッシュを引き起こす可能性があります。使用は自己責任とします。
+    </div>
+    <button class="panic-btn" id="panicBtn" onclick="activatePanic()">
+      <span>💣</span>
+      <span>PANIC MODE</span>
+      <span>緊急自己爆破</span>
+    </button>
+  </section>
+
+  <!-- フッター -->
+  <footer class="footer">
+    <div>Dramatic Slacker v1.0.0 ／ 首席言い訳アーキテクト製作</div>
+    <div style="margin-top:6px;">文書番号: DOC-2024-LOL-001 ／ 承認者: 不明（承認を待っている間に締切が来た）</div>
+    <div style="margin-top:6px;font-size:11px;opacity:0.5;">※ 本システムの使用による雇用関係への悪影響について、開発者は一切の責任を負いません。納期はドラマチックに遅れる場合があります。</div>
+  </footer>
+
+</main>
+
+<!-- パニック画面オーバーレイ -->
+<div class="panic-overlay" id="panicOverlay">
+  <div class="panic-flicker"></div>
+  <div class="panic-scanlines"></div>
+  <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;width:100%;max-width:700px;padding:20px;">
+    <div class="panic-text">
+      FATAL ERROR<br>
+      ユーザーの社会性がクラッシュしました<br>
+      <span style="font-size:0.6em;color:#ff6666;">SOCIAL_SKILL_NOT_FOUND (0x000EXCUSE)</span><br>
+      <span style="font-size:0.5em;color:#ff4444;letter-spacing:2px;">コアダンプを生成中…</span>
+    </div>
+    <div class="panic-error-code" id="panicErrorCode">
+      <!-- エラーログがJSで挿入される -->
+    </div>
+    <div class="panic-actions">
+      <button class="panic-action-btn retire" onclick="goRetire()">
+        🚪 退職代行サービスへGO
+      </button>
+      <button class="panic-action-btn back" onclick="closePanic()">
+        🔄 現実に戻る（非推奨）
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- トースト通知 -->
+<div class="toast" id="toast"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
